@@ -289,7 +289,7 @@ export function PublishButton({ adapter, className, children }: PublishButtonPro
               disabled={isPublishing}
             />
             <p className="text-sm text-muted-foreground">
-              Format: owner/repo or https://github.com/owner/repo
+              Format: https://github.com/owner/repo
             </p>
           </div>
 
