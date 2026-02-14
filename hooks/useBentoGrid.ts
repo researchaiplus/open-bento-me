@@ -735,7 +735,8 @@ export const useBentoGrid = () => {
             });
 
             // 一次性批量写入所有位置/尺寸变更，避免并发 updateBentoItem 互相覆盖
-            if (batchUpdates.length > 0) {
+            // Skip persistence in read-only mode (StaticConfigAdapter has no batchUpdatePositions)
+            if (batchUpdates.length > 0 && typeof (adapterRef.current as any).batchUpdatePositions === 'function') {
                 console.debug(`batch saving ${batchUpdates.length} item(s) position/size changes`);
                 (adapterRef.current as any).batchUpdatePositions(batchUpdates)
                     .catch((e: Error) => console.error('Failed to batch update positions:', e));
