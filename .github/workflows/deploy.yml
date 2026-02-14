@@ -1,0 +1,107 @@
+# Deploy to GitHub Pages
+# Builds a static export of the Next.js app and deploys to GitHub Pages.
+#
+# This workflow is designed for GitHub Template repositories:
+#   1. Users click "Use this template" to create their own repo
+#   2. Settings → Actions → General → Workflow permissions → "Read and write permissions"
+#   3. Settings → Pages → Source → "GitHub Actions"
+#   4. Push to main/master branch or trigger manually
+#   5. Edit profile on the deployed site, then click Publish to update data
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or tag to deploy'
+        required: false
+        default: 'main'
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        with:
+          enablement: true
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Copy user's profile-config.json (committed by PublishService) into public/
+      # so it gets included in the static build output. The default empty placeholder
+      # in public/ is overwritten by the real data if it exists at repo root.
+      - name: Copy profile config if available
+        run: |
+          if [ -f profile-config.json ]; then
+            echo "Found profile-config.json at repo root, copying to public/"
+            cp profile-config.json public/profile-config.json
+          else
+            echo "No profile-config.json at repo root, using default placeholder"
+          fi
+
+      # Enrich profile-config.json with live metadata from GitHub & HuggingFace
+      # APIs so the static site ships with descriptions, stars, downloads, etc.
+      - name: Enrich profile config with metadata
+        run: node scripts/enrich-config.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build static export
+        run: pnpm run build:gh-pages
+        env:
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_PUBLISHED: 'true'
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Output deployment URL
+        run: |
+          echo "Successfully deployed to ${{ steps.deployment.outputs.page_url }}"
+          echo "It may take a few minutes for your changes to appear."

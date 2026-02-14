@@ -1,0 +1,578 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.2% 73.9%;
+
+    --radius: 0.5rem;
+
+    --chart-1: 222.2 47.4% 11.2%;
+    --chart-2: 240 3.8% 46.1%;
+    --chart-3: 240 4.8% 95.9%;
+    --chart-4: 240 5.9% 10%;
+    --chart-5: 210 20% 98%;
+
+    --sidebar-background: 240 4.8% 95.9%;
+    --sidebar-foreground: 240 5% 34.9%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 210 20% 98%;
+    --sidebar-accent: 240 5.9% 90%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 240 5.4% 83.9%;
+    --sidebar-ring: 240 5.2% 73.9%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 210 20% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    --chart-1: 210 40% 98%;
+    --chart-2: 240 5% 64.9%;
+    --chart-3: 240 3.7% 15.9%;
+    --chart-4: 210 20% 98%;
+    --chart-5: 210 40% 98%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.9% 83.9%;
+    --sidebar-primary: 210 20% 98%;
+    --sidebar-primary-foreground: 240 5.9% 10%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 240 5% 34.9%;
+    --sidebar-ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter), 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  /* 防止小屏幕横向滚动 */
+  @media (max-width: theme('screens.md')) {
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    
+    * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  
+  /* 确保页面内容完全可见 */
+  body {
+    overflow-y: auto;
+  }
+  html {
+    scrollbar-gutter: stable;
+  }
+  
+  /* 移动端安全区域处理 */
+  @supports (padding: max(0px)) {
+    .mobile-safe-area-top {
+      padding-top: max(env(safe-area-inset-top), 8px);
+    }
+    
+    .mobile-safe-area-bottom {
+      padding-bottom: max(env(safe-area-inset-bottom), 8px);
+    }
+  }
+  
+  /* 顶部分隔线样式 - 类似图片中的效果 */
+  .mobile-header-separator {
+    height: 1px;
+    background-color: hsl(var(--border));
+    margin-top: max(env(safe-area-inset-top), 8px);
+    opacity: 0.6;
+  }
+  
+  /* 固定定位的移动端顶部安全区域 */
+  .mobile-header-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background-color: hsl(var(--background));
+  }
+  
+  /* 移动端内容区域安全区域 */
+  @media (max-width: theme('screens.md')) {
+    .mobile-content-safe {
+      padding-top: max(env(safe-area-inset-top), 0px);
+      padding-bottom: max(env(safe-area-inset-bottom), 0px);
+    }
+    
+    /* 竖屏模式：显示安全区域 */
+    @media (orientation: portrait) {
+      .mobile-header-portrait {
+        display: block;
+      }
+    }
+    
+    /* 横屏模式：隐藏安全区域 */
+    @media (orientation: landscape) {
+      .mobile-header-portrait {
+        display: none;
+      }
+    }
+  }
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Thin scrollbar utility (used for left fixed panel) */
+.thin-scrollbar {
+  /* Hidden by default */
+  scrollbar-width: none; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+}
+.thin-scrollbar::-webkit-scrollbar {
+  width: 0; /* WebKit hidden */
+  height: 0;
+}
+.thin-scrollbar:hover {
+  scrollbar-width: thin; /* Firefox: show thin on hover */
+}
+.thin-scrollbar:hover::-webkit-scrollbar {
+  width: 3px; /* WebKit: show thinner on hover */
+  height: 1px;
+}
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.35);
+  border-radius: 9999px;
+}
+.dark .thin-scrollbar {
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+}
+.dark .thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Global page scrollbar (applies to right/main page scroll) */
+body {
+  scrollbar-width: thin; /* Firefox */
+}
+body::-webkit-scrollbar {
+  width: 4px; /* WebKit */
+  height: 4px;
+}
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 9999px;
+}
+.dark body::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* React Image Crop Styles */
+.ReactCrop {
+  position: relative;
+  display: inline-block;
+  cursor: crosshair;
+  overflow: hidden;
+  max-width: 100%;
+  background-color: #000;
+}
+
+.ReactCrop:focus {
+  outline: none;
+}
+
+.ReactCrop--disabled {
+  cursor: inherit;
+}
+
+.ReactCrop__image {
+  display: block;
+  max-width: 100%;
+  touch-action: none;
+}
+
+.ReactCrop--crop-invisible .ReactCrop__image {
+  opacity: 0.5;
+}
+
+.ReactCrop__crop-selection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(0, 0, 0);
+  box-sizing: border-box;
+  cursor: move;
+  box-shadow: 0 0 0 9999em rgba(0, 0, 0, 0.5);
+  border: 1px solid;
+  border-image-source: url("data:image/gif;base64,R0lGODlhCgAKAJECAAAAAP///////wAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEI5RDc5MTFDNkE2MTFFM0JCMDZEODI2QTI4MzJBOTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEI5RDc5MTBDNkE2MTFFM0JCMDZEODI2QTI4MzJBOTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuZGlkOjAyODAxMTc0MDcyMDY4MTE4MDgzQzNDMjA5MzREQ0ZDIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjAyODAxMTc0MDcyMDY4MTE4MDgzQzNDMjA5MzREQ0ZDIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEBQoAAgAsAAAAAAoACgAAAhWEERkn7W3ei7KlagMWF/dKgYeyGAUAIfkEBQoAAgAsAAAAAAoACgAAAg+UYwLJ7RnQm7QmsCyVKhUAIfkEBQoAAgAsAAAAAAoACgAAAhCUYgLJHdiinNSAVfOEKoUCACH5BAUKAAIALAAAAAAKAAoAAAIRVISAdusPo3RAzYtjaMIaUQAAIfkEBQoAAgAsAAAAAAoACgAAAg+MDiem7Q8bSLFaG5il6xQAIfkEBQoAAgAsAAAAAAoACgAAAg+UYRLJ7QnQm7SmsCyVKhUAIfkEBQoAAgAsAAAAAAoACgAAAhCUYBLJDdiinNSEVfOEKoECACH5BAUKAAIALAAAAAAKAAoAAAIRFISBdusPo3RBzYsjaMIaUQAAOw==");
+  border-image-slice: 1;
+  border-image-repeat: repeat;
+}
+
+.ReactCrop--disabled .ReactCrop__crop-selection {
+  cursor: inherit;
+}
+
+.ReactCrop--circular-crop .ReactCrop__crop-selection {
+  border-radius: 50%;
+  box-shadow: 0px 0px 1px 1px white, 0 0 0 9999em rgba(0, 0, 0, 0.5);
+}
+
+.ReactCrop--invisible-crop .ReactCrop__crop-selection {
+  display: none;
+}
+
+.ReactCrop__rule-of-thirds-vt::before,
+.ReactCrop__rule-of-thirds-vt::after,
+.ReactCrop__rule-of-thirds-hz::before,
+.ReactCrop__rule-of-thirds-hz::after {
+  content: "";
+  display: block;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.ReactCrop__rule-of-thirds-vt::before,
+.ReactCrop__rule-of-thirds-vt::after {
+  width: 1px;
+  height: 100%;
+}
+
+.ReactCrop__rule-of-thirds-vt::before {
+  left: 33.3333%;
+  left: calc(100% / 3);
+}
+
+.ReactCrop__rule-of-thirds-vt::after {
+  left: 66.6666%;
+  left: calc(100% / 3 * 2);
+}
+
+.ReactCrop__rule-of-thirds-hz::before,
+.ReactCrop__rule-of-thirds-hz::after {
+  width: 100%;
+  height: 1px;
+}
+
+.ReactCrop__rule-of-thirds-hz::before {
+  top: 33.3333%;
+  top: calc(100% / 3);
+}
+
+.ReactCrop__rule-of-thirds-hz::after {
+  top: 66.6666%;
+  top: calc(100% / 3 * 2);
+}
+
+.ReactCrop__drag-handle {
+  position: absolute;
+}
+
+.ReactCrop__drag-handle::after {
+  position: absolute;
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-sizing: border-box;
+  outline: 1px solid transparent;
+}
+
+.ReactCrop .ord-nw {
+  top: 0;
+  left: 0;
+  margin-top: -5px;
+  margin-left: -5px;
+  cursor: nw-resize;
+}
+
+.ReactCrop .ord-nw::after {
+  top: 0;
+  left: 0;
+}
+
+.ReactCrop .ord-n {
+  top: 0;
+  left: 50%;
+  margin-top: -5px;
+  margin-left: -5px;
+  cursor: n-resize;
+}
+
+.ReactCrop .ord-n::after {
+  top: 0;
+}
+
+.ReactCrop .ord-ne {
+  top: 0;
+  right: 0;
+  margin-top: -5px;
+  margin-right: -5px;
+  cursor: ne-resize;
+}
+
+.ReactCrop .ord-ne::after {
+  top: 0;
+  right: 0;
+}
+
+.ReactCrop .ord-e {
+  top: 50%;
+  right: 0;
+  margin-top: -5px;
+  margin-right: -5px;
+  cursor: e-resize;
+}
+
+.ReactCrop .ord-e::after {
+  right: 0;
+}
+
+.ReactCrop .ord-se {
+  bottom: 0;
+  right: 0;
+  margin-bottom: -5px;
+  margin-right: -5px;
+  cursor: se-resize;
+}
+
+.ReactCrop .ord-se::after {
+  bottom: 0;
+  right: 0;
+}
+
+.ReactCrop .ord-s {
+  bottom: 0;
+  left: 50%;
+  margin-bottom: -5px;
+  margin-left: -5px;
+  cursor: s-resize;
+}
+
+.ReactCrop .ord-s::after {
+  bottom: 0;
+}
+
+.ReactCrop .ord-sw {
+  bottom: 0;
+  left: 0;
+  margin-bottom: -5px;
+  margin-left: -5px;
+  cursor: sw-resize;
+}
+
+.ReactCrop .ord-sw::after {
+  bottom: 0;
+  left: 0;
+}
+
+.ReactCrop .ord-w {
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  margin-left: -5px;
+  cursor: w-resize;
+}
+
+.ReactCrop .ord-w::after {
+  left: 0;
+}
+
+.ReactCrop__disabled .ReactCrop__drag-handle {
+  cursor: inherit;
+}
+
+.ReactCrop__drag-bar {
+  position: absolute;
+}
+
+.ReactCrop__drag-bar.ord-n {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  margin-top: -3px;
+}
+
+.ReactCrop__drag-bar.ord-e {
+  right: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  margin-right: -3px;
+}
+
+.ReactCrop__drag-bar.ord-s {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  margin-bottom: -3px;
+}
+
+.ReactCrop__drag-bar.ord-w {
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  margin-left: -3px;
+}
+
+.ReactCrop--new-crop .ReactCrop__drag-bar,
+.ReactCrop--new-crop .ReactCrop__drag-handle,
+.ReactCrop--fixed-aspect .ReactCrop__drag-bar {
+  display: none;
+}
+
+.ReactCrop--fixed-aspect .ReactCrop__drag-handle.ord-n,
+.ReactCrop--fixed-aspect .ReactCrop__drag-handle.ord-e,
+.ReactCrop--fixed-aspect .ReactCrop__drag-handle.ord-s,
+.ReactCrop--fixed-aspect .ReactCrop__drag-handle.ord-w {
+  display: none;
+}
+
+@media (max-width: theme('screens.md')), (pointer: coarse) {
+  .ReactCrop__drag-handle {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ReactCrop__drag-handle::after {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ReactCrop .ord-nw {
+    margin-top: -12px;
+    margin-left: -12px;
+  }
+
+  .ReactCrop .ord-n {
+    margin-top: -12px;
+    margin-left: -12px;
+  }
+
+  .ReactCrop .ord-ne {
+    margin-top: -12px;
+    margin-right: -12px;
+  }
+
+  .ReactCrop .ord-e {
+    margin-top: -12px;
+    margin-right: -12px;
+  }
+
+  .ReactCrop .ord-se {
+    margin-bottom: -12px;
+    margin-right: -12px;
+  }
+
+  .ReactCrop .ord-s {
+    margin-bottom: -12px;
+    margin-left: -12px;
+  }
+
+  .ReactCrop .ord-sw {
+    margin-bottom: -12px;
+    margin-left: -12px;
+  }
+
+  .ReactCrop .ord-w {
+    margin-top: -12px;
+    margin-left: -12px;
+  }
+
+  .ReactCrop__drag-handle::after {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* React Grid Layout Styles */
+.react-grid-placeholder {
+  background: rgb(244 244 245) !important; /* zinc-100 */
+  border: 1px dashed rgb(161 161 170) !important; /* zinc-400 */
+  border-radius: 24px !important;
+  opacity: 0.8 !important;
+}
+
+/* 确保react-grid-layout在小屏幕上居中 */
+@media (max-width: theme('screens.md')) {
+  .react-grid-layout {
+    margin: 0 auto !important;
+    justify-self: center !important;
+  }
+}
+

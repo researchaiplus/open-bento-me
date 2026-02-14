@@ -1,0 +1,20 @@
+{
+  "profile": {
+    "avatar": null,
+    "bio": null,
+    "username": "anonymous",
+    "socialLinks": {},
+    "title": null,
+    "institution": null,
+    "location": null,
+    "website": null,
+    "researchInterests": []
+  },
+  "bentoGrid": {
+    "items": []
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "lastModified": "2026-02-10T00:00:00.000Z"
+  }
+}
