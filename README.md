@@ -234,7 +234,7 @@ Your empty profile is now live at:
 When you click **Publish** for the first time, you'll need:
 
 - **GitHub Personal Access Token**
-	- Go to github.com/settings/tokens
+	- Go to [github.com/settings/tokens](https://github.com/settings/tokens)
 	- Click "Generate new token (classic)"
 	- Select the `repo` scope
 	- Copy the generated token
