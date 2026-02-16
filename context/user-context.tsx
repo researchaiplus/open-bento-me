@@ -17,6 +17,7 @@ import { avatarCache } from "@/lib/utils/avatar-cache"
 import { avatarPreloader } from "@/lib/utils/avatar-preloader"
 import { LocalStorageAdapter, StaticConfigAdapter } from "@/lib/adapters"
 import { isPublishedMode, isEditModeOnPublishedSite, seedLocalStorageFromStaticConfig } from "@/lib/adapters/adapter-provider"
+import { prefixStorageKey } from "@/lib/utils/get-site-prefix"
 
 // 定义 Action 类型
 type UserAction = 
@@ -219,7 +220,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       console.error('[UserContext] Failed to initialize user from localStorage:', error)
 
       // 回退：使用本地存储的头像缓存
-      const fallbackAvatar = storage.getItem("userAvatarUrl")
+      const fallbackAvatar = storage.getItem(prefixStorageKey("userAvatarUrl"))
       dispatch({
         type: 'INIT_USER',
         payload: {
@@ -283,7 +284,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       const newAvatarUrl = dataUrl
 
       // 保存到本地存储
-      storage.setItem("userAvatarUrl", newAvatarUrl)
+      storage.setItem(prefixStorageKey("userAvatarUrl"), newAvatarUrl)
 
       // 更新状态 — 对于 data: URL 不需要 cache-busting 参数
       dispatch({ type: 'UPDATE_AVATAR', payload: newAvatarUrl })

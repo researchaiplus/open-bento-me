@@ -5,6 +5,7 @@
  */
 
 import { GitHubAPI } from './api'
+import { prefixStorageKey } from '@/lib/utils/get-site-prefix'
 
 export interface GitHubConfig {
   token: string
@@ -13,10 +14,11 @@ export interface GitHubConfig {
   branch?: string
 }
 
+// Prefix all config keys with site prefix to isolate per-repo on shared origins
 const CONFIG_KEYS = {
-  TOKEN: 'github:token:v2',
-  REPO: 'github:repo:v2',
-  AUTO_SAVE: 'github:auto-save',
+  TOKEN: prefixStorageKey('github:token:v2'),
+  REPO: prefixStorageKey('github:repo:v2'),
+  AUTO_SAVE: prefixStorageKey('github:auto-save'),
 }
 
 /**

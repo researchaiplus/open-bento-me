@@ -3,8 +3,11 @@
  * 统一管理头像URL的缓存和同步
  */
 
-const AVATAR_CACHE_KEY = 'userAvatarUrl'
-const USER_ID_CACHE_KEY = 'currentUserId'
+import { prefixStorageKey } from '@/lib/utils/get-site-prefix'
+
+// Prefix cache keys with site prefix to isolate per-repo on shared origins
+const AVATAR_CACHE_KEY = prefixStorageKey('userAvatarUrl')
+const USER_ID_CACHE_KEY = prefixStorageKey('currentUserId')
 
 export class AvatarCacheManager {
   private static instance: AvatarCacheManager

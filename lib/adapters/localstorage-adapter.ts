@@ -8,6 +8,7 @@
 import { ProfileDataAdapter, ProfileConfig, AdapterBentoItem } from './index'
 import { ProfileData, ProfileUpdateData } from '@/types/profile'
 import { BentoItem } from '@/types/bento'
+import { getSitePrefix } from '@/lib/utils/get-site-prefix'
 
 const STORAGE_KEYS = {
   PROFILE: 'profile:profile',
@@ -23,7 +24,13 @@ export class LocalStorageAdapter implements ProfileDataAdapter {
   private namespace: string
 
   constructor(options: LocalStorageAdapterOptions = {}) {
-    this.namespace = options.namespace || 'profile'
+    // Include site prefix in namespace to isolate data per repo on shared origins
+    // e.g., on lizabethli.github.io/liz-test → namespace = "liz-test:profile"
+    // on lizabethli.github.io/liz → namespace = "liz:profile"
+    // local dev (no prefix) → namespace = "profile"
+    const sitePrefix = getSitePrefix()
+    const base = options.namespace || 'profile'
+    this.namespace = sitePrefix ? `${sitePrefix}:${base}` : base
   }
 
   getAdapterName(): string {

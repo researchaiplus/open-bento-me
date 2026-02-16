@@ -40,6 +40,7 @@ import { ProfileDataAdapter } from '@/lib/adapters'
 import { LocalStorageAdapter } from '@/lib/adapters/localstorage-adapter'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
+import { prefixStorageKey } from '@/lib/utils/get-site-prefix'
 
 interface PublishButtonProps {
   adapter: ProfileDataAdapter | null
@@ -61,9 +62,9 @@ export function PublishButton({ adapter, className, children }: PublishButtonPro
   // Auto-load cached GitHub token, repo URL, and branch from localStorage on mount
   useEffect(() => {
     try {
-      const cachedToken = localStorage.getItem('github:token:b64')
-      const cachedRepo = localStorage.getItem('github:repo')
-      const cachedBranch = localStorage.getItem('github:branch')
+      const cachedToken = localStorage.getItem(prefixStorageKey('github:token:b64'))
+      const cachedRepo = localStorage.getItem(prefixStorageKey('github:repo'))
+      const cachedBranch = localStorage.getItem(prefixStorageKey('github:branch'))
       if (cachedToken) {
         setGithubToken(atob(cachedToken))
       }
@@ -160,10 +161,10 @@ export function PublishButton({ adapter, className, children }: PublishButtonPro
           description: `Your profile is live at ${publishResult.deploymentUrl}`,
         })
 
-        // Store token, repo, and branch for future use
-        localStorage.setItem('github:token:b64', btoa(githubToken))
-        localStorage.setItem('github:repo', `${owner}/${repo}`)
-        localStorage.setItem('github:branch', branch)
+        // Store token, repo, and branch for future use (prefixed per-site)
+        localStorage.setItem(prefixStorageKey('github:token:b64'), btoa(githubToken))
+        localStorage.setItem(prefixStorageKey('github:repo'), `${owner}/${repo}`)
+        localStorage.setItem(prefixStorageKey('github:branch'), branch)
 
         // Update localStorage metadata to match the published config timestamp.
         // This prevents stale-data re-seeding on next edit mode entry,
